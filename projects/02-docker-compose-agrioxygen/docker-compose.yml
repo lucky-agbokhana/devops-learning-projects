@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+
+  app:
+    build: .
+    container_name: agrioxygen-app
+    ports:
+      - "8080:5000"
+    environment:
+      - ENV=production
+      - APP_NAME=AgriOxygen
+      - DB_HOST=postgres
+      - DB_NAME=agrioxygen
+      - DB_USER=farmer
+      - DB_PASSWORD=securepassword123
+      - REDIS_HOST=redis
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - app-logs:/app/logs
+    networks:
+      - agrioxygen-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: agrioxygen-postgres
+    environment:
+      - POSTGRES_DB=agrioxygen
+      - POSTGRES_USER=farmer
+      - POSTGRES_PASSWORD=securepassword123
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - agrioxygen-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: agrioxygen-redis
+    volumes:
+      - redis-data:/data
+    networks:
+      - agrioxygen-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  redis-data:
+  app-logs:
+
+networks:
+  agrioxygen-network:
+    driver: bridge
