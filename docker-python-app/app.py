@@ -9,7 +9,9 @@ def home():
     return {
         "message": "Hello from Lucky's Docker Container!",
         "hostname": socket.gethostname(),
-        "environment": os.environ.get("ENV", "development")
+        "environment": os.environ.get("ENV", "development"),
+        "app_name": os.environ.get("APP_NAME", "MyApp"),
+        "version": "1.0.0"   
     }
 
 @app.route('/health')
@@ -19,4 +21,3 @@ def health():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
-    
