@@ -1,0 +1,27 @@
+cd ~/Desktop/DevOps-Projects/devops-learning-projects/docker-python-app
+```
+
+Create the file in VS Code named `.gitignore` and add this:
+```
+# Environment files - NEVER commit these
+.env
+.env.local
+.env.production
+.env.staging
+
+# Secret files
+*.key
+*.pem
+*.cert
+secrets/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Mac files
+.DS_Store
+
+# Logs
+*.log
