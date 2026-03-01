@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agrioxygen-app
+  labels:
+    app: agrioxygen
+    tier: backend
+    version: "2.0.0"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: agrioxygen
+  template:
+    metadata:
+      labels:
+        app: agrioxygen
+        tier: backend
+    spec:
+      containers:
+      - name: agrioxygen-app
+        image: lucky-python-app:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: ENV
+          value: "production"
+        - name: APP_NAME
+          value: "AgriOxygen"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
